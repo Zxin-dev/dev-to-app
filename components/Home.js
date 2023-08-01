@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 
 import { SafeAreaView, Button } from "react-native";
@@ -18,29 +18,31 @@ export default function Home({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={styles.main}>
-          {article.map((article) => {
-            return (
-              <View style={styles.container}>
-                <View style={styles.header}>
-                  <Image
-                    style={styles.profileImage}
-                    source={article.user.profile_image}
-                    contentFit="cover"
-                    transition={1000}
-                  ></Image>
-                  <View style={{ display: "flex" }}>
-                    <Text style={styles.name}> {article.user.name}</Text>
-                    <Text style={{ fontSize: 10, color: "gray" }}>
-                      {" "}
-                      {moment(article.created_at).format(
-                        "MMMM Do YYYY, h:mm a"
-                      )}
-                    </Text>
-                  </View>
+    <ScrollView style={{ height: 500 }}>
+      <View style={styles.main}>
+        {article.map((article, key) => {
+          return (
+            <View key={article.id} style={styles.container}>
+              <View style={styles.header}>
+                <Image
+                  style={styles.profileImage}
+                  source={article.user.profile_image}
+                  contentFit="cover"
+                  transition={1000}
+                ></Image>
+                <View style={{ display: "flex" }}>
+                  <Text style={styles.name}> {article.user.name}</Text>
+                  <Text style={{ fontSize: 10, color: "gray" }}>
+                    {" "}
+                    {moment(article.created_at).format("MMMM Do YYYY, h:mm a")}
+                  </Text>
                 </View>
+              </View>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate(`Blog`, { slug: article.slug })
+                }
+              >
                 <View style={styles.body}>
                   <Text style={styles.title}>{article.title}</Text>
                 </View>
@@ -50,20 +52,12 @@ export default function Home({ navigation }) {
                   contentFit="cover"
                   transition={1000}
                 ></Image>
-                <Button
-                  onPress={() =>
-                    navigation.navigate(`Blog`, { slug: article.slug })
-                  }
-                  title="Learn More"
-                  color="black"
-                  accessibilityLabel="Learn more about this purple button"
-                />
-              </View>
-            );
-          })}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+              </Pressable>
+            </View>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 }
 
